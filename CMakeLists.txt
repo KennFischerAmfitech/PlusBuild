@@ -314,6 +314,7 @@ OPTION(PLUS_USE_PICOSCOPE "Provide support for PicoScope 2xxx series oscilloscop
 OPTION(PLUS_USE_GENERIC_SENSOR_TRACKER "Provide support for generic sensor data collection" OFF)
 OPTION(PLUS_USE_AZUREKINECT "Provide support for Azure Kinect cameras" OFF)
 OPTION(PLUS_USE_REVOPOINT3DCAMERA "Provide support for Revopoint 3D cameras" OFF)
+OPTION(PLUS_USE_AMFITRACK "Provide support for AMFITRACK" ON)
 
 # ---------- Other devices ------------
 OPTION(PLUS_USE_TextRecognizer "Enable the text recognizer virtual device" OFF)
@@ -603,6 +604,11 @@ ENDIF()
 IF(PLUSBUILD_USE_aruco)
   INCLUDE(SuperBuild/External_aruco.cmake)
 ENDIF()
+
+IF(PLUS_USE_AMFITRACK)
+INCLUDE(SuperBuild/External_AMFITRACK.cmake)
+ENDIF()
+
 
 # OvrvisionPro dependency
 IF(PLUS_USE_OvrvisionPro)

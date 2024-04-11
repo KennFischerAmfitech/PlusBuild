@@ -1,0 +1,46 @@
+IF(AMFITRACK_DIR)
+  # AMFITRACK has been built already
+  FIND_PACKAGE(AMFITRACK REQUIRED NO_MODULE)
+
+  MESSAGE(STATUS "Using AMFITRACK tester available at: ${AMFITRACK_DIR}")
+
+  # Copy libraries to CMAKE_RUNTIME_OUTPUT_DIRECTORY
+  PlusCopyLibrariesToDirectory(${CMAKE_RUNTIME_OUTPUT_DIRECTORY} ${AMFITRACK_LIBRARIES})
+
+  SET (PLUS_AMFITRACK_DIR ${AMFITRACK_DIR} CACHE INTERNAL "Path to store AMFITRACK binaries")
+ELSE()
+  # AMFITRACK has not been built yet, so download and build it as an external project
+  SetGitRepositoryTag(
+    AMFITRACK
+    "https://github.com/amfitech/amfitrack_cpp_SDK.git" # Amfitech Amfitrack CPP SDK
+    "V0.1"
+    )
+
+  SET (PLUS_AMFITRACK_SRC_DIR "${CMAKE_BINARY_DIR}/AMFITRACK")
+  SET (PLUS_AMFITRACK_DIR "${CMAKE_BINARY_DIR}/AMFITRACK-bin" CACHE INTERNAL "Path to store AMFITRACK binaries")
+  MESSAGE(STATUS "Using AMFITRACK available at: ${PLUS_AMFITRACK_SRC_DIR}")
+  ExternalProject_Add( AMFITRACK
+    "${PLUSBUILD_EXTERNAL_PROJECT_CUSTOM_COMMANDS}"
+    PREFIX "${CMAKE_BINARY_DIR}/Deps/AMFITRACK-prefix"
+    SOURCE_DIR "${PLUS_AMFITRACK_SRC_DIR}"
+    BINARY_DIR "${PLUS_AMFITRACK_DIR}"
+    #--Download step--------------
+    GIT_REPOSITORY ${AMFITRACK_GIT_REPOSITORY}
+    GIT_TAG ${AMFITRACK_GIT_TAG}
+    #--Configure step-------------
+    CMAKE_ARGS 
+      ${ep_common_args}
+      -DCMAKE_RUNTIME_OUTPUT_DIRECTORY:PATH=${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+      -DCMAKE_LIBRARY_OUTPUT_DIRECTORY:PATH=${CMAKE_LIBRARY_OUTPUT_DIRECTORY}
+      -DCMAKE_ARCHIVE_OUTPUT_DIRECTORY:PATH=${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}
+      -DBUILD_SHARED_LIBS:BOOL=${PLUSBUILD_BUILD_SHARED_LIBS}
+      -DCMAKE_CXX_FLAGS:STRING=${ep_common_cxx_flags}
+      -DCMAKE_C_FLAGS:STRING=${ep_common_c_flags}
+      -DAMFITRACK_SDK_DIR:PATH=${PLUS_AMFITRACK_SRC_DIR}
+    #--Build step-----------------
+    BUILD_ALWAYS 1
+    #--Install step-----------------
+    INSTALL_COMMAND ""
+    DEPENDS ${AMFITRACK_DEPENDENCIES}
+    )
+ENDIF()
