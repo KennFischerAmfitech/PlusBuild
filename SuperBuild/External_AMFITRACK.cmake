@@ -8,6 +8,7 @@ IF(AMFITRACK_DIR)
   PlusCopyLibrariesToDirectory(${CMAKE_RUNTIME_OUTPUT_DIRECTORY} ${AMFITRACK_LIBRARIES})
 
   SET (PLUS_AMFITRACK_DIR ${AMFITRACK_DIR} CACHE INTERNAL "Path to store AMFITRACK binaries")
+  SET (PLUS_AMFITRACK_SRC_DIR "${CMAKE_BINARY_DIR}/AMFITRACK" CACHE INTERNAL "Path to store AMFITRACK binaries")
 ELSE()
   # AMFITRACK has not been built yet, so download and build it as an external project
   SetGitRepositoryTag(
@@ -36,7 +37,6 @@ ELSE()
       -DBUILD_SHARED_LIBS:BOOL=${PLUSBUILD_BUILD_SHARED_LIBS}
       -DCMAKE_CXX_FLAGS:STRING=${ep_common_cxx_flags}
       -DCMAKE_C_FLAGS:STRING=${ep_common_c_flags}
-      -DAMFITRACK_SDK_DIR:PATH=${PLUS_AMFITRACK_SRC_DIR}
     #--Build step-----------------
     BUILD_ALWAYS 1
     #--Install step-----------------
