@@ -14,7 +14,7 @@ ELSE()
   SetGitRepositoryTag(
     AMFITRACK
     "https://github.com/amfitech/amfitrack_cpp_SDK.git" # Amfitech Amfitrack CPP SDK
-    "V0.1"
+    "master"
     )
 
   SET (PLUS_AMFITRACK_SRC_DIR "${CMAKE_BINARY_DIR}/AMFITRACK")
